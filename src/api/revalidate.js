@@ -1,6 +1,6 @@
 // you need to create tag for each feature
 
-export const tag_types = {
+export const revalidate = {
   auth: "AUTH",
   user: "USER",
   product: "PRODUCT",

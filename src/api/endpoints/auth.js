@@ -1,6 +1,6 @@
 import { setTokens } from "../../redux/slices/authSlice";
 import { baseApi } from "../config/baseApi";
-import { tag_types } from "../tag_types";
+import { revalidate } from "../revalidate";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -26,7 +26,7 @@ export const authApi = baseApi.injectEndpoints({
           console.error("Login failed", err);
         }
       },
-      invalidatesTags: [tag_types.auth],
+      invalidatesTags: [revalidate.auth],
     }),
 
     register: builder.mutation({
@@ -35,7 +35,7 @@ export const authApi = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: [tag_types.auth],
+      invalidatesTags: [revalidate.auth],
     }),
 
     changePassword: builder.mutation({
@@ -44,7 +44,7 @@ export const authApi = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: [tag_types.auth],
+      invalidatesTags: [revalidate.auth],
     }),
   }),
 });

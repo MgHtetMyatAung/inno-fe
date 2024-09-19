@@ -1,5 +1,5 @@
 import { baseApi } from "../config/baseApi";
-import { tag_types } from "../tag_types";
+import { revalidate } from "../revalidate";
 
 export const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -8,7 +8,7 @@ export const productApi = baseApi.injectEndpoints({
         url: `/api/merchant/product/${id}`,
         // headers: access_token(),
       }),
-      providesTags: [tag_types.product],
+      providesTags: [revalidate.product],
     }),
   }),
 });

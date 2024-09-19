@@ -23,9 +23,7 @@ export const baseQueryWithErrorHandling = async (args, api, extraOptions) => {
   if (result?.data?.status == "fail") {
     // Set the global error in the error slice
     // console.log(result);
-    api.dispatch(
-      setErrorInfo({ type: "error", message: "Something went wrong" })
-    );
+    api.dispatch(setErrorInfo({ type: "error", message: result.data.error }));
 
     // Additional logic for handling specific errors (e.g., 401 Unauthorized)
     // if (result.error.status === 401) {
