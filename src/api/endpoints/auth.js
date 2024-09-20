@@ -1,4 +1,4 @@
-import { setTokens } from "../../redux/slices/authSlice";
+import { setTokens, systemLogout } from "../../redux/slices/authSlice";
 import { baseApi } from "../config/baseApi";
 import { revalidate } from "../revalidate";
 
@@ -46,6 +46,24 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [revalidate.auth],
     }),
+
+    logout: builder.mutation({
+      query: () => ({
+        url: "/api/auth/token",
+        method: "DELETE",
+      }),
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          if (data.status === "success") {
+            dispatch(systemLogout());
+          }
+        } catch (err) {
+          console.error("Logout failed", err);
+        }
+      },
+      invalidatesTags: [revalidate.auth],
+    }),
   }),
 });
 
@@ -53,4 +71,5 @@ export const {
   useLoginMutation,
   useRegisterMutation,
   useChangePasswordMutation,
+  useLogoutMutation,
 } = authApi;
