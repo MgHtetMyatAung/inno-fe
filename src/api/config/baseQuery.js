@@ -1,21 +1,26 @@
-import { fetchBaseQuery } from "@reduxjs/toolkit/query";
+import { fetchBaseQuery, retry } from "@reduxjs/toolkit/query";
 import { decryptToken } from "../../libs/crypto";
 import { setErrorInfo } from "../../redux/slices/errorSlice";
 // import { systemLogout } from "../../redux/slices/authSlice";
 
-const baseQuery = fetchBaseQuery({
-  baseUrl: import.meta.env.VITE_APP_BASE_URL,
-  prepareHeaders: (headers, { getState }) => {
-    const token = getState().auth.accessToken;
+const baseQuery = retry(
+  fetchBaseQuery({
+    baseUrl: import.meta.env.VITE_APP_BASE_URL,
+    prepareHeaders: (headers, { getState }) => {
+      const token = getState().auth.accessToken;
 
-    if (token) {
-      const decryptedToken = decryptToken(token);
-      headers.set("access-token", decryptedToken);
-    }
+      if (token) {
+        const decryptedToken = decryptToken(token);
+        headers.set("access-token", decryptedToken);
+      }
 
-    return headers;
-  },
-});
+      return headers;
+    },
+  }),
+  {
+    maxRetries: 5,
+  }
+);
 
 export const baseQueryWithErrorHandling = async (args, api, extraOptions) => {
   const result = await baseQuery(args, api, extraOptions);
